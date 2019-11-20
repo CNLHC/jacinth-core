@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+BASEDIR=$(dirname "$0")
+
+if hash yarn ; 
+then
+    localBinDir=$(yarn bin)
+elif hash npm;  then
+    localBinDir=$(npm bin)
+else
+    echo "No package manager found"
+fi
+
+hostModulesDir=$(readlink -f $localBinDir/.. );
+jacinthRoot=$(readlink -f $hostModulesDir/jacinth);
+
+export NODE_PATH="$hostModulesDir";
+
+node $jacinthRoot/dist/index.js $@
