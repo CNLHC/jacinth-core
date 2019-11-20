@@ -9,5 +9,8 @@ export default async (args: any) => {
   process.env.NODE_ENV = "production";
   server()
     .then(() => logger.info("Server Start"))
-    .catch(() => logger.error("Server exit unexpectedly"));
+    .catch(err => {
+      logger.error("Server exit unexpectedly", err);
+      process.exit(-1);
+    });
 };
