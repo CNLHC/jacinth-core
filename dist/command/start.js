@@ -13,6 +13,9 @@ exports.default = async (args) => {
     process.env.NODE_ENV = "production";
     server_1.default()
         .then(() => logging_1.logger.info("Server Start"))
-        .catch(() => logging_1.logger.error("Server exit unexpectedly"));
+        .catch(err => {
+        logging_1.logger.error("Server exit unexpectedly", err);
+        process.exit(-1);
+    });
 };
 //# sourceMappingURL=start.js.map

@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 "use strict";
-require("../index");
+require("@jacinth/dev");
 //# sourceMappingURL=wrapper.js.map
