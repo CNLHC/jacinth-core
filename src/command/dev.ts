@@ -11,33 +11,23 @@ export default async (args: IArgs) => {
   preCheck({ command: "dev" });
   initEnv(args);
   const env = getEnv();
-  const loadBFF: () => void = () => server();
+  const loadBFF = debounce(() => server(), 200, true);
+  const transform = debounce(
+    (_evt: string, _path: string) => {
+      logger.debug(`transform server file due to Event(${_evt})-${_path}`);
+      transformDir(env.serverDir, env.cacheDir);
+    },
+    200,
+    true
+  );
 
+  logger.debug("first build");
+  await transform(env.serverDir, env.cacheDir);
   await loadBFF();
 
   try {
-    chokidar.watch(env.cacheDir).on(
-      "change",
-      debounce(
-        _evt => {
-          loadBFF();
-        },
-        200,
-        true
-      )
-    );
-
-    chokidar.watch(env.serverDir).on(
-      "all",
-      debounce(
-        (_evt, _path) => {
-          logger.debug(`reprocess server file due to Event(${_evt})-${_path}`);
-          transformDir(env.serverDir, env.cacheDir);
-        },
-        200,
-        true
-      )
-    );
+    chokidar.watch(env.cacheDir).on("change", loadBFF);
+    chokidar.watch(env.serverDir).on("all", transform);
   } catch (e) {
     console.error("Some error occur", (e as Error).stack);
   }
