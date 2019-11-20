@@ -12,9 +12,9 @@ const RESTFulLoader: TPlugin<TOpt> = async (app, opt, done) => {
     await gatherFile(opt.cacheDir, ["**", "!(_)*.js"]);
   const plugins = await gatherRESTRoutes();
 
-  plugins.forEach(e => {
+  plugins.forEach(async e => {
     delete require.cache[require.resolve(e)];
-    const mod = require(e);
+    const mod = await import(e);
     logger.debug(`register custom plugin  in ${e}`);
     if (typeof mod === "function") app.register(fp(mod), opt);
     else if (typeof mod.default === "function")

@@ -10,9 +10,9 @@ const RESTFulLoader: TPlugin<TOpt> = async (app, opt, done) => {
   const gatherRESTRoutes = async () => await gatherFile(opt.cacheDir, ["*.js"]);
   const plugins = await gatherRESTRoutes();
 
-  plugins.forEach(e => {
+  plugins.forEach(async e => {
     delete require.cache[require.resolve(e)];
-    const mod = require(e);
+    const mod = await import(e);
     const opt = {
       prefix: "/api",
     };
