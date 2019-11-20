@@ -8,5 +8,5 @@
     "isolatedModules": false,
     "noEmit": false
   },
-  "include": ["src/**/*.ts","src/**/*.js"]
+  "include": ["src/**/*.ts", "src/**/*.js"]
 }

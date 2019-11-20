@@ -4,15 +4,16 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "tsc --project tsconfig.dev.json --watch --outDir ./dist ",
-    "build": "next build && tsc --project tsconfig.server.json",
-    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "dev:test": "tsc --project tsconfig.test.json --watch --outDir ./.test",
+    "dev:src": "tsc --project tsconfig.dev.json --watch --outDir ./dist ",
+    "dev": "yarn run dev:test& yarn run dev:src",
     "lint:fix": "prettier --loglevel debug --write  \"src/**/*.ts\" ",
     "commit": "git-cz"
   },
   "dependencies": {
     "@babel/runtime": "^7.7.2",
     "@babel/runtime-corejs2": "^7.7.2",
+    "@jacinthjs/jacinth-dev": "git+https://github.com/CNLHC/jacinth-core#dev",
     "@zeit/next-css": "^1.0.1",
     "babel-preset-minify": "^0.5.1",
     "chalk": "^2.4.2",
@@ -49,6 +50,7 @@
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
+    "ava": "^2.4.0",
     "cross-env": "^5.2.0",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.7.0",
@@ -60,7 +62,7 @@
     "prettier-eslint": "^9.0.1",
     "semantic-release": "^15.13.31",
     "semantic-release-cli": "^5.2.3",
-    "ts-node": "^8.1.0",
+    "ts-node": "^8.5.2",
     "typescript": "^3.7.2"
   },
   "bin": {
