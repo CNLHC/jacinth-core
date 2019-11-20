@@ -5,10 +5,9 @@ import { logger } from "../util/logging";
 
 export default async (args: any) => {
   preCheck();
-  initEnv(args);
+  initEnv(args, { port: 3000, host: "0.0.0.0" });
   process.env.NODE_ENV = "production";
-  console.log("hi?");
   server()
-    .then(() => logger.info("Server Terminated"))
+    .then(() => logger.info("Server Start"))
     .catch(() => logger.error("Server exit unexpectedly"));
 };

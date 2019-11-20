@@ -9,11 +9,10 @@ const server_1 = __importDefault(require("../server"));
 const logging_1 = require("../util/logging");
 exports.default = async (args) => {
     check_1.default();
-    env_1.initEnv(args);
+    env_1.initEnv(args, { port: 3000, host: "0.0.0.0" });
     process.env.NODE_ENV = "production";
-    console.log("hi?");
     server_1.default()
-        .then(() => logging_1.logger.info("Server Terminated"))
+        .then(() => logging_1.logger.info("Server Start"))
         .catch(() => logging_1.logger.error("Server exit unexpectedly"));
 };
 //# sourceMappingURL=start.js.map

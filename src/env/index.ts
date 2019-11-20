@@ -1,13 +1,13 @@
 import path from "path";
 
-function calRuntimeEnv(p: PresetEnv): RuntimeEnv {
+function calRuntimeEnv(p: PresetEnv): IAbsolutePath {
   const getAbsolute = (s: string[]) => path.resolve(process.cwd(), ...s);
   return Object.entries(p.relativePath).reduce(
     (acc, [k, v]) => ({
       ...acc,
       [k]: getAbsolute(v),
     }),
-    {} as RuntimeEnv
+    {} as IAbsolutePath
   );
 }
 
@@ -42,8 +42,6 @@ const defaultPresetEnv: PresetEnv = {
 
 type IAbsolutePath = { [key in keyof PresetEnv["relativePath"]]: string };
 
-interface RuntimeEnv extends IAbsolutePath {}
-
 type Env = PresetEnv & IAbsolutePath;
 
 const defaultEnv: Env = {
@@ -53,12 +51,19 @@ const defaultEnv: Env = {
 
 let __env: Env | undefined;
 
-export function initEnv(args: { [key: string]: any }) {
+export function initEnv(
+  args: { [key: string]: any },
+  overrideDefault?: Partial<Env>
+) {
   Object.keys(args).forEach(key =>
     args[key] === undefined ? delete args[key] : {}
   );
+
   const tEnv: PresetEnv = {
-    ...defaultPresetEnv,
+    ...{
+      ...defaultPresetEnv,
+      ...overrideDefault,
+    },
     ...args,
   };
   __env = { ...tEnv, ...calRuntimeEnv(tEnv) };

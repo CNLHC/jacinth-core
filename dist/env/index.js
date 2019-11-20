@@ -24,9 +24,9 @@ const defaultPresetEnv = {
 };
 const defaultEnv = Object.assign(Object.assign({}, defaultPresetEnv), calRuntimeEnv(defaultPresetEnv));
 let __env;
-function initEnv(args) {
+function initEnv(args, overrideDefault) {
     Object.keys(args).forEach(key => args[key] === undefined ? delete args[key] : {});
-    const tEnv = Object.assign(Object.assign({}, defaultPresetEnv), args);
+    const tEnv = Object.assign(Object.assign({}, Object.assign(Object.assign({}, defaultPresetEnv), overrideDefault)), args);
     __env = Object.assign(Object.assign({}, tEnv), calRuntimeEnv(tEnv));
 }
 exports.initEnv = initEnv;
