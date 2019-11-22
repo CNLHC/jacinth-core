@@ -19,21 +19,13 @@ export default async () => {
     server = fastify({});
   }
 
-  server.register(require("fastify-multipart"));
-
-  server.register(require("fastify-cookie"));
-  server.register(require("fastify-session"), {
-    cookieName: "sessionId",
-    secret: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-    cookie: { secure: false },
-    expires: 1800000,
-  });
+  server.register((await import("fastify-multipart")).default);
 
   server.register(pluginLoader, { cacheDir: env.pluginCacheDir });
 
-  server.after(() => {
+  server.after(async () => {
     server.register(restLoader, { cacheDir: env.RESTCacheDir });
-    server.register(require("./plugins/next"));
+    server.register((await import("./plugins/next")).default);
   });
 
   const address = await server.listen(env.port, env.host);

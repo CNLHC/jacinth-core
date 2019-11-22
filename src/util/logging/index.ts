@@ -14,10 +14,7 @@ export const logger = winston.createLogger({
   level: "debug",
   format: NextFormat(),
   //   defaultMeta: { service: 'user-service' },
-  transports: [
-    new winston.transports.File({ filename: "error.log", level: "error" }),
-    new winston.transports.File({ filename: "combined.log" }),
-  ],
+  transports: [],
 });
 
 if (process.env.NODE_ENV !== "production") {
@@ -26,4 +23,9 @@ if (process.env.NODE_ENV !== "production") {
       format: winston.format.simple(),
     })
   );
+} else {
+  logger.add(
+    new winston.transports.File({ filename: "error.log", level: "error" })
+  );
+  logger.add(new winston.transports.File({ filename: "combined.log" }));
 }

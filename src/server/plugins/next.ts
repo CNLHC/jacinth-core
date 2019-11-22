@@ -47,4 +47,5 @@ const NextSSR = fp<HttpServer, RawRequest, RawResponse, undefined>(
   }
 );
 
-module.exports = NextSSR;
+
+export default NextSSR
