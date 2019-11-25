@@ -13,7 +13,6 @@
   "dependencies": {
     "@babel/runtime": "^7.7.2",
     "@babel/runtime-corejs2": "^7.7.2",
-    "@jacinthjs/jacinth-dev": "git+https://github.com/CNLHC/jacinth-core#dev",
     "@zeit/next-css": "^1.0.1",
     "babel-preset-minify": "^0.5.1",
     "chalk": "^2.4.2",
