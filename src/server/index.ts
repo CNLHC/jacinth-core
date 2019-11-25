@@ -23,8 +23,8 @@ export default async () => {
 
   server.register(pluginLoader, { cacheDir: env.pluginCacheDir });
 
-  server.after(async () => {
-    server.register(restLoader, { cacheDir: env.RESTCacheDir });
+  server.ready(async () => {
+    server.register(restLoader, { cacheDir: env.RESTCacheDir, prefix: "/api" });
     server.register((await import("./plugins/next")).default);
   });
 

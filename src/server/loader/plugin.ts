@@ -37,7 +37,7 @@ const RESTFulLoader: TPlugin<TOpt> = async (app, opt, done) => {
       else if (typeof mod.default === "function")
         app.register(fp(mod.default), opt);
       else {
-        const errMsg = `unknown REST plugin file in ${e}`;
+        const errMsg = `unknown plugin file in ${e}`;
         logger.error(errMsg);
         done(new Error(errMsg));
       }

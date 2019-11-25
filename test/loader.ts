@@ -1,6 +1,7 @@
 import test from "ava";
 import path from "path";
 import PluginLoader from "../src/server/loader/plugin";
+import RestLoader from "../src/server/loader/rest";
 import fastify from "fastify";
 
 test("test rest loader function", async t => {
@@ -54,4 +55,40 @@ test("test plugin loader error handle", async t => {
       resolve();
     });
   });
+});
+
+test("test rest api load", async t => {
+  const app = fastify({ pluginTimeout: 500 });
+  app.register(RestLoader, {
+    cacheDir: path.resolve(__dirname, "_util", "mockapi"),
+    prefix: "/api",
+  });
+
+  t.true(
+    JSON.parse(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/api/login",
+        })
+      ).payload
+    ).name === "login"
+  );
+
+  t.true(
+    JSON.parse(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/api/login2",
+        })
+      ).payload
+    ).name === "login"
+  );
+
+  const res2 = await app.inject({
+    method: "POST",
+    url: "/api/register",
+  });
+  t.deepEqual(JSON.parse(res2.payload).status, "ok");
 });

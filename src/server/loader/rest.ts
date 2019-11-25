@@ -4,6 +4,7 @@ import { logger } from "../../util/logging";
 
 type TOpt = {
   cacheDir: string;
+  prefix: string;
 };
 
 const RESTFulLoader: TPlugin<TOpt> = async (app, opt, done) => {
@@ -14,12 +15,9 @@ const RESTFulLoader: TPlugin<TOpt> = async (app, opt, done) => {
   plugins.forEach(async e => {
     delete require.cache[require.resolve(e)];
     const mod = await import(e);
-    const opt = {
-      prefix: "/api",
-    };
     logger.debug(`register custom REST api  in ${e}`);
-    if (typeof mod === "function") app.register(mod, opt);
-    else if (typeof mod.default === "function") app.register(mod.default, opt);
+    if (typeof mod === "function") app.register(mod);
+    else if (typeof mod.default === "function") app.register(mod.default);
     else {
       const errMsg = `unknown REST api file in ${e}`;
       logger.error(errMsg);
