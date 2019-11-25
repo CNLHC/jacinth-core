@@ -16,36 +16,33 @@ const nextApp = next({
 });
 let __devCacheFlag = false;
 
-const NextSSR = fp<HttpServer, RawRequest, RawResponse, undefined>(
-  async function<
-    Server extends HttpServer,
-    Request extends RawRequest,
-    Response extends RawResponse
-  >(
-    app: fastify.FastifyInstance<Server, Request, Response>,
-    _opts: undefined,
-    done: fp.nextCallback
-  ) {
-    if (!__devCacheFlag) await nextApp.prepare();
-    const nextHandler = nextApp.getRequestHandler();
-    if (dev) {
-      app.get("/_next/*", (req, reply) => {
-        return nextHandler(req.req, reply.res).then(() => {
-          reply.sent = true;
-        });
-      });
-    }
-    app.all("/*", (req, reply) => {
-      (req.req as any).session = (req as any).session;
-
+const NextSSR = fp<HttpServer, RawRequest, RawResponse, any>(async function<
+  Server extends HttpServer,
+  Request extends RawRequest,
+  Response extends RawResponse
+>(
+  app: fastify.FastifyInstance<Server, Request, Response>,
+  _opts: any,
+  done: fp.nextCallback
+) {
+  if (!__devCacheFlag) await nextApp.prepare();
+  const nextHandler = nextApp.getRequestHandler();
+  if (dev) {
+    app.get("/_next/*", (req, reply) => {
       return nextHandler(req.req, reply.res).then(() => {
         reply.sent = true;
       });
     });
-    if (dev) __devCacheFlag = true;
-    done();
   }
-);
+  app.all("/*", (req, reply) => {
+    (req.req as any).session = (req as any).session;
 
+    return nextHandler(req.req, reply.res).then(() => {
+      reply.sent = true;
+    });
+  });
+  if (dev) __devCacheFlag = true;
+  done();
+});
 
-export default NextSSR
+export default NextSSR;

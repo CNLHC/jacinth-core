@@ -8,5 +8,7 @@ declare module "fastify" {
   > {
     probe: () => boolean;
     trap: boolean;
+    state: () => number;
+    nestedTrap: boolean;
   }
 }
