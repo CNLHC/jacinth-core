@@ -36,5 +36,5 @@ const NextSSR = fastify_plugin_1.default(async function (app, _opts, done) {
         __devCacheFlag = true;
     done();
 });
-module.exports = NextSSR;
+exports.default = NextSSR;
 //# sourceMappingURL=next.js.map

@@ -26,14 +26,15 @@ exports.logger = winston_1.default.createLogger({
     level: "debug",
     format: NextFormat(),
     //   defaultMeta: { service: 'user-service' },
-    transports: [
-        new winston_1.default.transports.File({ filename: "error.log", level: "error" }),
-        new winston_1.default.transports.File({ filename: "combined.log" }),
-    ],
+    transports: [],
 });
 if (process.env.NODE_ENV !== "production") {
     exports.logger.add(new winston_1.default.transports.Console({
         format: winston_1.default.format.simple(),
     }));
+}
+else {
+    exports.logger.add(new winston_1.default.transports.File({ filename: "error.log", level: "error" }));
+    exports.logger.add(new winston_1.default.transports.File({ filename: "combined.log" }));
 }
 //# sourceMappingURL=index.js.map

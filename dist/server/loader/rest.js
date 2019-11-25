@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("../../util/path");
 const logging_1 = require("../../util/logging");
 const RESTFulLoader = async (app, opt, done) => {
-    const gatherRESTRoutes = async () => await path_1.gatherFile(opt.cacheDir, ["*.js"]);
+    const gatherRESTRoutes = async () => await path_1.gatherFile(opt.cacheDir, ["**", "!(_)*.js"], ["_*/**/*"]);
     const plugins = await gatherRESTRoutes();
     plugins.forEach(async (e) => {
         delete require.cache[require.resolve(e)];

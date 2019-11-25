@@ -3,6 +3,13 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
 const chalk_1 = __importDefault(require("chalk"));
@@ -21,18 +28,11 @@ exports.default = async () => {
         server.close();
         server = fastify_1.default({});
     }
-    server.register(require("fastify-multipart"));
-    server.register(require("fastify-cookie"));
-    server.register(require("fastify-session"), {
-        cookieName: "sessionId",
-        secret: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-        cookie: { secure: false },
-        expires: 1800000,
-    });
+    server.register((await Promise.resolve().then(() => __importStar(require("fastify-multipart")))).default);
     server.register(plugin_1.default, { cacheDir: env.pluginCacheDir });
-    server.after(() => {
+    server.after(async () => {
         server.register(rest_1.default, { cacheDir: env.RESTCacheDir });
-        server.register(require("./plugins/next"));
+        server.register((await Promise.resolve().then(() => __importStar(require("./plugins/next")))).default);
     });
     const address = await server.listen(env.port, env.host);
     logging_1.logger.info(chalk_1.default.green(`server available at ${address}`));

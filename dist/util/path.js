@@ -18,8 +18,10 @@ exports.getTscPath = async (cwd) => await getPath(cwd, ["node_modules", ".bin", 
 exports.getJacinthRoot = () => path_1.default.resolve(path_1.default.join(__dirname, "..", ".."));
 exports.unsafeGetPagesDir = async (cwd) => (await exports.getPagesDir(cwd));
 exports.unsafeGetServerDir = async (cwd) => (await exports.getServerDir(cwd));
-exports.gatherFile = async (baseDir, pattern) => {
-    return new Promise((res, rej) => glob_1.default(path_1.default.join(baseDir, ...pattern), (err, matches) => {
+exports.gatherFile = async (baseDir, pattern, ignore = []) => {
+    return new Promise((res, rej) => glob_1.default(path_1.default.join(baseDir, ...pattern), {
+        ignore: ignore.length > 0 ? path_1.default.join(baseDir, ...ignore) : undefined,
+    }, (err, matches) => {
         if (err)
             rej(err);
         res(matches);
