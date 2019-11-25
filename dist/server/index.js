@@ -30,7 +30,7 @@ exports.default = async () => {
     }
     server.register((await Promise.resolve().then(() => __importStar(require("fastify-multipart")))).default);
     server.register(plugin_1.default, { cacheDir: env.pluginCacheDir });
-    server.ready(async () => {
+    server.after(async () => {
         server.register(rest_1.default, { cacheDir: env.RESTCacheDir, prefix: "/api" });
         server.register((await Promise.resolve().then(() => __importStar(require("./plugins/next")))).default);
     });
