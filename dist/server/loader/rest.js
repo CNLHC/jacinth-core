@@ -15,14 +15,11 @@ const RESTFulLoader = async (app, opt, done) => {
     plugins.forEach(async (e) => {
         delete require.cache[require.resolve(e)];
         const mod = await Promise.resolve().then(() => __importStar(require(e)));
-        const opt = {
-            prefix: "/api",
-        };
         logging_1.logger.debug(`register custom REST api  in ${e}`);
         if (typeof mod === "function")
-            app.register(mod, opt);
+            app.register(mod);
         else if (typeof mod.default === "function")
-            app.register(mod.default, opt);
+            app.register(mod.default);
         else {
             const errMsg = `unknown REST api file in ${e}`;
             logging_1.logger.error(errMsg);

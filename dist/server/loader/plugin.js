@@ -41,7 +41,7 @@ const RESTFulLoader = async (app, opt, done) => {
             else if (typeof mod.default === "function")
                 app.register(fastify_plugin_1.default(mod.default), opt);
             else {
-                const errMsg = `unknown REST plugin file in ${e}`;
+                const errMsg = `unknown plugin file in ${e}`;
                 logging_1.logger.error(errMsg);
                 done(new Error(errMsg));
             }

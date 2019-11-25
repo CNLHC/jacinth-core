@@ -19,7 +19,17 @@ const NextFormat = winston_1.format((info, opts) => {
     else if (opts.whisper) {
         info.message = info.message.toLowerCase();
     }
-    info.level = chalk_1.default `[ {dim ${info.level}} ]`;
+    switch (info.level) {
+        case "error":
+            info.level = chalk_1.default `[ {red ${info.level}} ]`;
+            break;
+        case "info":
+            info.level = chalk_1.default `[ {blue ${info.level}} ]`;
+            break;
+        default:
+            info.level = chalk_1.default `[ {dim ${info.level}} ]`;
+            break;
+    }
     return info;
 });
 exports.logger = winston_1.default.createLogger({
