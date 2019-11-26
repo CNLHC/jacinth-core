@@ -26,13 +26,14 @@ export const unsafeGetServerDir = async (cwd: string) =>
 export const gatherFile = async (
   baseDir: string,
   pattern: string[],
-  ignore: string[] = []
+  ignore: string[][] = []
 ) => {
   return new Promise<string[]>((res, rej) =>
     glob(
       path.join(baseDir, ...pattern),
       {
-        ignore: ignore.length > 0 ? path.join(baseDir, ...ignore) : undefined,
+        ignore: ignore.length > 0 ? ignore.map(e=>path.join(baseDir, ...e)) : undefined,
+
       },
       (err, matches) => {
         if (err) rej(err);

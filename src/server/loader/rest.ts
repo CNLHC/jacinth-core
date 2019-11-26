@@ -1,6 +1,6 @@
 import { TPlugin } from "../types/plugin";
-import { gatherFile } from "../../util/path";
 import { logger } from "../../util/logging";
+import { gatherRESTRoutes } from "./common";
 
 type TOpt = {
   cacheDir: string;
@@ -8,9 +8,7 @@ type TOpt = {
 };
 
 const RESTFulLoader: TPlugin<TOpt> = async (app, opt, done) => {
-  const gatherRESTRoutes = async () =>
-    await gatherFile(opt.cacheDir, ["**", "!(_)*.js"], ["_*/**/*"]);
-  const plugins = await gatherRESTRoutes();
+  const plugins = await gatherRESTRoutes(opt.cacheDir);
 
   plugins.forEach(async e => {
     delete require.cache[require.resolve(e)];

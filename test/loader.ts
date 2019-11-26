@@ -4,7 +4,7 @@ import PluginLoader from "../src/server/loader/plugin";
 import RestLoader from "../src/server/loader/rest";
 import fastify from "fastify";
 
-test("test rest loader function", async t => {
+test("test plugin loader function", async t => {
   const app = fastify({});
   app.register(PluginLoader, {
     cacheDir: path.resolve(__dirname, "_util", "fakeplugin"),
