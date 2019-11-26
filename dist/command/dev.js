@@ -11,13 +11,15 @@ const build_1 = require("../util/build");
 const logging_1 = require("../util/logging");
 const server_1 = __importDefault(require("../server"));
 exports.default = async (args) => {
-    check_1.default({ command: "dev" });
-    env_1.initEnv(args);
+    await check_1.default({ command: "dev" });
+    await env_1.initEnv(args);
     const env = env_1.getEnv();
-    const loadBFF = debounce_1.default(() => server_1.default(), 200, true);
-    const transform = debounce_1.default((_evt, _path) => {
+    const loadBFF = debounce_1.default(async () => {
+        return await server_1.default();
+    }, 200, true);
+    const transform = debounce_1.default(async (_evt, _path) => {
         logging_1.logger.debug(`transform server file due to Event(${_evt})-${_path}`);
-        build_1.transformDir(env.serverDir, env.cacheDir);
+        await build_1.transformDir(env.serverDir, env.cacheDir);
     }, 200, true);
     logging_1.logger.debug("first build");
     await transform(env.serverDir, env.cacheDir);

@@ -8,13 +8,13 @@ const chalk_1 = __importDefault(require("chalk"));
 const del_1 = __importDefault(require("del"));
 const env_1 = require("../env");
 const logging_1 = require("./logging");
-function preCheck(ctx) {
+async function preCheck(ctx) {
     var _a;
     const cwd = process.cwd();
     const env = env_1.getEnv();
     if (((_a = ctx) === null || _a === void 0 ? void 0 : _a.command) === "dev") {
         logging_1.logger.debug("clean the cache dir");
-        del_1.default(env.cacheDir);
+        await del_1.default(env.cacheDir);
     }
     path_1.getPagesDir(cwd).then(e => {
         if (!e) {

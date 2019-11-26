@@ -7,11 +7,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = require("../../util/path");
 const logging_1 = require("../../util/logging");
+const common_1 = require("./common");
 const RESTFulLoader = async (app, opt, done) => {
-    const gatherRESTRoutes = async () => await path_1.gatherFile(opt.cacheDir, ["**", "!(_)*.js"], ["_*/**/*"]);
-    const plugins = await gatherRESTRoutes();
+    const plugins = await common_1.gatherRESTRoutes(opt.cacheDir);
     plugins.forEach(async (e) => {
         delete require.cache[require.resolve(e)];
         const mod = await Promise.resolve().then(() => __importStar(require(e)));

@@ -11,11 +11,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_plugin_1 = __importDefault(require("fastify-plugin"));
-const path_1 = require("../../util/path");
 const logging_1 = require("../../util/logging");
+const common_1 = require("./common");
 const RESTFulLoader = async (app, opt, done) => {
-    const gatherRESTRoutes = async () => await path_1.gatherFile(opt.cacheDir, ["**", "!(_)*.js"], ["_*/**/*"]);
-    const plugins = await gatherRESTRoutes();
+    const plugins = await common_1.gatherRESTRoutes(opt.cacheDir);
     plugins.forEach(async (e) => {
         delete require.cache[require.resolve(e)];
         const getMod = async () => {
