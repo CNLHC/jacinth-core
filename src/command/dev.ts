@@ -8,14 +8,16 @@ import server from "../server";
 
 type IArgs = any;
 export default async (args: IArgs) => {
-  preCheck({ command: "dev" });
-  initEnv(args);
+  await preCheck({ command: "dev" });
+  await initEnv(args);
   const env = getEnv();
-  const loadBFF = debounce(() => server(), 200, true);
+  const loadBFF = debounce(async () => {
+    return await server();
+  }, 200, true);
   const transform = debounce(
-    (_evt: string, _path: string) => {
+    async (_evt: string, _path: string) => {
       logger.debug(`transform server file due to Event(${_evt})-${_path}`);
-      transformDir(env.serverDir, env.cacheDir);
+      await transformDir(env.serverDir, env.cacheDir);
     },
     200,
     true

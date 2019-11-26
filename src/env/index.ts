@@ -51,7 +51,7 @@ const defaultEnv: Env = {
 
 let __env: Env | undefined;
 
-export function initEnv(
+export async function initEnv(
   args: { [key: string]: any },
   overrideDefault?: Partial<Env>
 ) {

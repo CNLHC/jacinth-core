@@ -4,13 +4,13 @@ import del from "del";
 import { getEnv } from "../env";
 import { logger } from "./logging";
 
-export default function preCheck(ctx?: any) {
+export default async function preCheck(ctx?: any) {
   const cwd = process.cwd();
   const env = getEnv();
 
   if (ctx?.command === "dev") {
     logger.debug("clean the cache dir");
-    del(env.cacheDir);
+    await del(env.cacheDir);
   }
 
   getPagesDir(cwd).then(e => {
