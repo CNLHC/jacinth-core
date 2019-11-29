@@ -36,6 +36,11 @@ if (process.env.NODE_ENV !== "production") {
   );
 } else {
   logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    })
+  );
+  logger.add(
     new winston.transports.File({ filename: "error.log", level: "error" })
   );
   logger.add(new winston.transports.File({ filename: "combined.log" }));

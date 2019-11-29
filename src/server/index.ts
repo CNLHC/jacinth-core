@@ -5,6 +5,7 @@ import { getEnv } from "../env/index";
 import { logger } from "../util/logging";
 import pluginLoader from "./loader/plugin";
 import restLoader from "./loader/rest";
+import path from "path";
 
 let serverRunning = false;
 let server = fastify({});
@@ -21,10 +22,18 @@ export default async () => {
 
   server.register((await import("fastify-multipart")).default);
 
-  server.register(pluginLoader, { cacheDir: env.pluginCacheDir });
+  const pluginCacheDir = dev
+    ? env.pluginCacheDir
+    : path.resolve(env.distDir, ".plugin");
+
+  server.register(pluginLoader, { cacheDir: pluginCacheDir });
 
   server.after(async () => {
-    server.register(restLoader, { cacheDir: env.RESTCacheDir, prefix: "/api" });
+    const RESTCacheDir = dev
+      ? env.pluginCacheDir
+      : path.resolve(env.distDir, ".rest");
+
+    server.register(restLoader, { cacheDir: RESTCacheDir, prefix: "/api" });
     server.register((await import("./plugins/next")).default);
   });
 

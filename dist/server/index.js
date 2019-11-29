@@ -17,6 +17,7 @@ const index_1 = require("../env/index");
 const logging_1 = require("../util/logging");
 const plugin_1 = __importDefault(require("./loader/plugin"));
 const rest_1 = __importDefault(require("./loader/rest"));
+const path_1 = __importDefault(require("path"));
 let serverRunning = false;
 let server = fastify_1.default({});
 const dev = process.env.NODE_ENV !== "production";
@@ -29,9 +30,15 @@ exports.default = async () => {
         server = fastify_1.default({});
     }
     server.register((await Promise.resolve().then(() => __importStar(require("fastify-multipart")))).default);
-    server.register(plugin_1.default, { cacheDir: env.pluginCacheDir });
+    const pluginCacheDir = dev
+        ? env.pluginCacheDir
+        : path_1.default.resolve(env.distDir, ".plugin");
+    server.register(plugin_1.default, { cacheDir: pluginCacheDir });
     server.after(async () => {
-        server.register(rest_1.default, { cacheDir: env.RESTCacheDir, prefix: "/api" });
+        const RESTCacheDir = dev
+            ? env.pluginCacheDir
+            : path_1.default.resolve(env.distDir, ".rest");
+        server.register(rest_1.default, { cacheDir: RESTCacheDir, prefix: "/api" });
         server.register((await Promise.resolve().then(() => __importStar(require("./plugins/next")))).default);
     });
     const address = await server.listen(env.port, env.host);
