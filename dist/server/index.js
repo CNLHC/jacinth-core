@@ -24,7 +24,6 @@ const dev = process.env.NODE_ENV !== "production";
 exports.default = async () => {
     logging_1.logger.debug(`reload bff under ${dev ? "dev" : "production"} mode`);
     const env = index_1.getEnv();
-    console.log(222, env);
     // if there already have one instance running, kill it and get a new one
     if (serverRunning) {
         server.close();
@@ -34,11 +33,10 @@ exports.default = async () => {
     const pluginCacheDir = dev
         ? env.pluginCacheDir
         : path_1.default.resolve(env.distDir, "plugin");
-    console.log(1111, pluginCacheDir);
     server.register(plugin_1.default, { cacheDir: pluginCacheDir });
     server.after(async () => {
         const RESTCacheDir = dev
-            ? env.pluginCacheDir
+            ? env.RESTCacheDir
             : path_1.default.resolve(env.distDir, "rest");
         server.register(rest_1.default, { cacheDir: RESTCacheDir, prefix: "/api" });
         server.register((await Promise.resolve().then(() => __importStar(require("./plugins/next")))).default);
