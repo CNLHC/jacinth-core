@@ -18,12 +18,20 @@ export const transformFile = async (
   fullPath: string,
   outDir: string
 ) => {
+  const ext = path
+    .basename(fullPath)
+    .split(".")
+    .pop();
+  if (ext !== "ts") {
+    logger.debug(`skip none typescript file ${fullPath}`);
+    return;
+  }
+
   const fileName = path
     .basename(fullPath)
     .split(".")
     .slice(0, -1)
     .join(".");
-
   const relativePath = path.dirname(path.relative(baseDir, fullPath));
   await compile(fullPath, {
     outPath: path.join(outDir, relativePath, `${fileName}.js`),
@@ -31,8 +39,8 @@ export const transformFile = async (
 };
 
 export const transformDir = async (srcDir: string, outDir: string) => {
-  const tFileSet = new Set([...(await gF(srcDir, ["**", "*.ts"]))]);
-  tFileSet.forEach(async e => await transformFile(srcDir, e, outDir));
+  const tFileSet = Array.from(new Set([...(await gF(srcDir, ["**", "*.ts"]))]));
+  await Promise.all(tFileSet.map(e => transformFile(srcDir, e, outDir)));
   return tFileSet;
 };
 
