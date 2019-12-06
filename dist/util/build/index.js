@@ -13,6 +13,14 @@ const write = util_1.promisify(fs_1.default.writeFile);
 const exists = util_1.promisify(fs_1.default.exists);
 const mkdir = util_1.promisify(fs_1.default.mkdir);
 exports.transformFile = async (baseDir, fullPath, outDir) => {
+    const ext = path_1.default
+        .basename(fullPath)
+        .split(".")
+        .pop();
+    if (ext !== "ts") {
+        logging_1.logger.debug(`skip none typescript file ${fullPath}`);
+        return;
+    }
     const fileName = path_1.default
         .basename(fullPath)
         .split(".")
@@ -24,8 +32,8 @@ exports.transformFile = async (baseDir, fullPath, outDir) => {
     });
 };
 exports.transformDir = async (srcDir, outDir) => {
-    const tFileSet = new Set([...(await path_2.gatherFile(srcDir, ["**", "*.ts"]))]);
-    tFileSet.forEach(async (e) => await exports.transformFile(srcDir, e, outDir));
+    const tFileSet = Array.from(new Set([...(await path_2.gatherFile(srcDir, ["**", "*.ts"]))]));
+    await Promise.all(tFileSet.map(e => exports.transformFile(srcDir, e, outDir)));
     return tFileSet;
 };
 async function compile(source, opts) {
