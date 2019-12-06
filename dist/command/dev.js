@@ -11,6 +11,7 @@ const build_1 = require("../util/build");
 const logging_1 = require("../util/logging");
 const server_1 = __importDefault(require("../server"));
 const del_1 = __importDefault(require("del"));
+const fs_1 = __importDefault(require("fs"));
 exports.default = async (args) => {
     await check_1.default({ command: "dev" });
     await env_1.initEnv(args);
@@ -27,6 +28,11 @@ exports.default = async (args) => {
     }, 200, true);
     const removeCompiledPath = debounce_1.default(async (_path) => {
         logging_1.logger.debug(`remove file ${_path}`);
+        if (fs_1.default.lstatSync(_path).isFile) {
+            const ingredients = _path.split(".");
+            if (ingredients.length > 1)
+                await del_1.default([...ingredients.slice(0, ingredients.length), ".*"].join(""));
+        }
         await del_1.default(_path);
     });
     logging_1.logger.debug("first build");
