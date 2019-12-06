@@ -12,20 +12,20 @@ const path_2 = require("../path");
 const write = util_1.promisify(fs_1.default.writeFile);
 const exists = util_1.promisify(fs_1.default.exists);
 const mkdir = util_1.promisify(fs_1.default.mkdir);
+exports.transformFile = async (baseDir, fullPath, outDir) => {
+    const fileName = path_1.default
+        .basename(fullPath)
+        .split(".")
+        .slice(0, -1)
+        .join(".");
+    const relativePath = path_1.default.dirname(path_1.default.relative(baseDir, fullPath));
+    await compile(fullPath, {
+        outPath: path_1.default.join(outDir, relativePath, `${fileName}.js`),
+    });
+};
 exports.transformDir = async (srcDir, outDir) => {
     const tFileSet = new Set([...(await path_2.gatherFile(srcDir, ["**", "*.ts"]))]);
-    tFileSet.forEach(e => {
-        logging_1.logger.debug(`compile server file ${e}`);
-        const fileName = path_1.default
-            .basename(e)
-            .split(".")
-            .slice(0, -1)
-            .join(".");
-        const relativePath = path_1.default.dirname(path_1.default.relative(srcDir, e));
-        compile(e, {
-            outPath: path_1.default.join(outDir, relativePath, `${fileName}.js`),
-        });
-    });
+    tFileSet.forEach(async (e) => await exports.transformFile(srcDir, e, outDir));
     return tFileSet;
 };
 async function compile(source, opts) {

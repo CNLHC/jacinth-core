@@ -19,7 +19,9 @@ const plugin_1 = __importDefault(require("./loader/plugin"));
 const rest_1 = __importDefault(require("./loader/rest"));
 const path_1 = __importDefault(require("path"));
 let serverRunning = false;
-let server = fastify_1.default({});
+let server = fastify_1.default({
+    pluginTimeout: 100000
+});
 const dev = process.env.NODE_ENV !== "production";
 exports.default = async () => {
     logging_1.logger.debug(`reload bff under ${dev ? "dev" : "production"} mode`);
