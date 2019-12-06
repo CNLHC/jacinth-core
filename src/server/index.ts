@@ -8,7 +8,9 @@ import restLoader from "./loader/rest";
 import path from "path";
 
 let serverRunning = false;
-let server = fastify({});
+let server = fastify({
+  pluginTimeout:100000
+});
 const dev = process.env.NODE_ENV !== "production";
 
 export default async () => {
