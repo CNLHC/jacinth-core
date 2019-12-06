@@ -6,6 +6,8 @@ import { transformDir, transformFile } from "../util/build";
 import { logger } from "../util/logging";
 import server from "../server";
 import del from "del";
+import path from "path";
+import fs from "fs";
 
 type IArgs = any;
 export default async (args: IArgs) => {
@@ -38,6 +40,11 @@ export default async (args: IArgs) => {
 
   const removeCompiledPath = debounce(async (_path: string) => {
     logger.debug(`remove file ${_path}`);
+    if (fs.lstatSync(_path).isFile) {
+      const ingredients = _path.split(".");
+      if (ingredients.length > 1)
+        await del([...ingredients.slice(0, ingredients.length), ".*"].join(""));
+    }
     await del(_path);
   });
 
