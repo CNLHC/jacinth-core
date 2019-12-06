@@ -13,6 +13,18 @@ export default withCSS({
   webpack(config: webpack.Configuration, ctx: any) {
     // @ts-ignore
     const { buildId, dev, isServer, defaultLoaders, webpack } = ctx;
+    config?.module?.rules &&
+      config.module.rules.push({
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 32768,
+            },
+          },
+        ],
+      });
     config.resolve = {
       ...config.resolve,
       alias: {
