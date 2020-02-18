@@ -32,8 +32,10 @@ export const gatherFile = async (
     glob(
       path.join(baseDir, ...pattern),
       {
-        ignore: ignore.length > 0 ? ignore.map(e=>path.join(baseDir, ...e)) : undefined,
-
+        ignore:
+          ignore.length > 0
+            ? ignore.map(e => path.join(baseDir, ...e))
+            : undefined,
       },
       (err, matches) => {
         if (err) rej(err);

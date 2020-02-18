@@ -9,7 +9,7 @@ import path from "path";
 
 let serverRunning = false;
 let server = fastify({
-  pluginTimeout:100000
+  pluginTimeout: 100000,
 });
 const dev = process.env.NODE_ENV !== "production";
 
