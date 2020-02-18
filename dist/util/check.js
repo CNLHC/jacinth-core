@@ -1,4 +1,3 @@
-"use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -9,10 +8,9 @@ const del_1 = __importDefault(require("del"));
 const env_1 = require("../env");
 const logging_1 = require("./logging");
 async function preCheck(ctx) {
-    var _a;
     const cwd = process.cwd();
     const env = env_1.getEnv();
-    if (((_a = ctx) === null || _a === void 0 ? void 0 : _a.command) === "dev") {
+    if (ctx?.command === "dev") {
         logging_1.logger.debug("clean the cache dir");
         await del_1.default(env.cacheDir);
     }

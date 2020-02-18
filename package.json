@@ -7,6 +7,7 @@
     "dev:test": "tsc --project tsconfig.test.json --watch --outDir ./.test",
     "dev:src": "tsc --project tsconfig.dev.json --watch --outDir ./dist ",
     "dev": "yarn run dev:test& yarn run dev:src",
+    "dist":"tsc --project tsconfig.json --outDir ./dist",
     "lint:fix": "prettier --loglevel debug --write  \"src/**/*.ts\" ",
     "commit": "git-cz"
   },
