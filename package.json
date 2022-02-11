@@ -25,7 +25,7 @@
     "fastify-auth": "^0.6.0",
     "fastify-cookie": "^3.2.0",
     "fastify-jwt": "^1.2.0",
-    "fastify-multipart": "^1.0.2",
+    "fastify-multipart": "^5.3.1",
     "fastify-plugin": "^1.6.0",
     "fastify-session": "^3.1.0",
     "glob": "^7.1.6",
